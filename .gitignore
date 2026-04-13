@@ -1,0 +1,44 @@
+###########################################################################################################
+### ispconfig-advanced-jailkit-tools project .gitignore file ##############################################
+###########################################################################################################
+
+# Exclude the helper bash script which sets my personal Git user.email and user.name
+/GitWhoAmI.sh
+
+###########################################################################################################
+### Common exclusions related to OS, build-tool and IDE ###################################################
+###########################################################################################################
+
+# Exclude the old .svn directories in the project (if any). Exclude all of them, on any sub-directory level
+**/.svn/
+
+# --- Maven ---
+/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# --- IntelliJ IDEA ---
+# but we must ignore local user workspace and task history.
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/usage.statistics.xml
+.idea/dictionaries
+.idea/shelf/
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+
+# --- OS Generated Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# --- ISPConfig Awareness Detection (Fixed: No getent) ---
+# Goal: Use XDG_STATE_HOME if set.
+# Otherwise, search /etc/passwd for a 'web[numbers]' user sharing this UID.
+
+if [ -n "$XDG_STATE_HOME" ]; then
+    # Scenario A: Explicit XDG_STATE_HOME set.
+    # We strictly respect this variable and ignore shared-user logic.
+    PDTACH_ROOT="$XDG_STATE_HOME/pdtach"
+else
+    # Scenario B: Default Behavior (ISPConfig Shared Logic)
+    
+    # 1. Get current numeric UID
+    MY_UID=$(id -u)
+
+    # 2. Search /etc/passwd for a 'web[numbers]' user sharing this UID
+    #    We use grep/cut to be robust in minimal jails where 'getent' is missing.
+    TARGET_USER=$(grep ":${MY_UID}:" /etc/passwd | cut -d: -f1 | grep -E '^web[0-9]+$' | head -n 1)
+
+    if [ -n "$TARGET_USER" ]; then
+        # We found a shared 'web' user.
+        # Get their home directory directly from /etc/passwd (Field 6)
+        TARGET_HOME=$(grep "^${TARGET_USER}:" /etc/passwd | cut -d: -f6)
+        
+        if [ -n "$TARGET_HOME" ] && [ -d "$TARGET_HOME" ]; then
+             PDTACH_ROOT="$TARGET_HOME/.pdtach"
+        else
+             # Safety fallback if home dir lookup fails
+             PDTACH_ROOT="$HOME/.pdtach"
+        fi
+    else
+        # Standard User: Use own home
+        PDTACH_ROOT="$HOME/.pdtach"
+    fi
+fi
+
+# Ensure the directory exists and has secure permissions (0700)
+# This applies to both scenarios
+if [ ! -d "$PDTACH_ROOT" ]; then
+    mkdir -p "$PDTACH_ROOT"
+    chmod 700 "$PDTACH_ROOT"
+fi
+# --------------------------------------------------------
+
+# Function to list sessions with colors, removing the 'total' line
+list_sessions() {
+    echo -e "\n ______[current active sessions]________"
+    echo -e "\n in dir \"$PDTACH_ROOT\"":
+    
+    # Check if dir exists and is not empty
+    if [ ! -d "$PDTACH_ROOT" ] || [ -z "$(ls -A "$PDTACH_ROOT" 2>/dev/null)" ]; then
+        echo "     No dtach sessions for your user"
+        echo " _______________________________________"
+        return
+    fi
+
+    # ls -lh: List files with human readable sizes
+    # --color=always: Force colors so they persist through pipes
+    # sed '/^total/d': Remove the line starting with "total"
+    ls -lh --color=always "$PDTACH_ROOT" | sed '/^total/d'
+    echo " _______________________________________"
+}
+
+# Arguments
+pSock="$1"
+
+# 0. Handle No Arguments OR "--list"
+if [ -z "$pSock" ] || [ "$pSock" == "--list" ]; then
+    list_sessions
+    exit 0
+fi
+
+# 1. Validate pSock (Word chars and dashes only)
+if [[ ! "$pSock" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+    echo -e "\"$pSock\": Your socket name must contain only word chars and dashes. Sorry."
+    exit 1
+fi
+
+# 2. Check if socket exists (Error if it MISSING)
+if [ ! -e "$PDTACH_ROOT"/"$pSock" ]; then
+    echo -e "Dtach session name \"$pSock\" does not exist for your user!"
+    list_sessions
+    exit 1
+fi
+
+# 3. Execute dtach attach
+exec dtach -a "$PDTACH_ROOT"/"$pSock" -e '^]'
