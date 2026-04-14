@@ -19,14 +19,15 @@ Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension d
 ## 🌟 Core Features
 
 1. **Scenario-Based Shell Users:** Intelligently provisions environments based on the username suffix (e.g., Jailed, Admin Non-Jailed, Standard).
-2. **The Secure "Vault"\*:** Admin users get a secure directory (`webX___username`) *outside* the PHP-FPM chroot to store sensitive data, SSH keys, and Git metadata, protecting them even if the website is compromised.
-3. **Detached Git Tracking\*:** Clone and track your website (`web/`) securely using a detached Git worktree managed from the Vault.
+2. **The Secure "Vault"** `[Note]`: Admin users get a secure directory (`webX___username`) *outside* the PHP-FPM chroot to store sensitive data, SSH keys, and Git metadata, protecting them even if the website is compromised.
+3. **Detached Git Tracking** `[Note]`: Clone and track your website (`web/`) securely using a detached Git worktree managed from the Vault.
 4. **Context-Aware Colored Terminal:** Injects a custom, highly visible bash prompt (e.g., `╚═ user@ domain.com@server ═╡/web╞════ 💲`) that automatically updates your terminal window title to match your environment. It also dynamically displays your active Git branch (in cyan) *only* when you are inside the `/web` directory.
-5. **Strict Internal Directory Isolation\*:** Non-jailed users' home directories (which physically reside inside the jail path) are strictly locked down. Jailed users and PHP-FPM processes receive "Permission denied" errors and cannot read, write, or traverse into the `.bash_history`, SSH keys, or config files of the higher-privileged accounts.
+5. **Strict Internal Directory Isolation** `[Note]`: Non-jailed users' home directories (which physically reside inside the jail path) are strictly locked down. Jailed users and PHP-FPM processes receive "Permission denied" errors and cannot read, write, or traverse into the `.bash_history`, SSH keys, or config files of the higher-privileged accounts.
 6. **Background Sessions (`dtach`):** Run persistent background programs in your jails using custom, secure wrapper commands.
 7. **Smart Identity & Environment Context:** Automatically extracts your website domain, client email, and contact details from the ISPConfig database to personalize your terminal prompts and pre-configure your Git authorship without manual setup.
 
-*\* **Note:** Requires the creation of at least one non-Jailed shell-user per website for this feature to work for that particular website.*
+---
+`[Note]` *Requires the creation of at least one non-Jailed shell-user per website for this feature to work for that particular website.*
 
 ## 🚀 Installation (Drop-In Replacement)
 
