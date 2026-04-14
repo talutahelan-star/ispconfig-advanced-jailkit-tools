@@ -223,7 +223,7 @@ cat <<EOF > "$PADM_GITUSER_SCRIPT"
 #!/bin/bash
 
 # 1. Identity Variables
-PADM_WEBSITE_ADMIN_EMAIL="$PADM_WEBSITE_ADMIN_EMAIL" # Put your ForgejoGit-user email here if you don't want to use the default-generated one
+PADM_WEBSITE_ADMIN_EMAIL="$PADM_WEBSITE_ADMIN_EMAIL" # Put your Git-user email here if you don't want to use the default-generated one
 PADM_FORGEJO_USER="$PADM_FORGEJO_USER"
 PADM_FORGEJO_USER_FULLNAME="$PADM_FORGEJO_USER_FULLNAME"
 
@@ -400,7 +400,7 @@ if [ -f "\$PADM_GIT_DIR/HEAD" ]; then
 
     cat <<MSG
 
-    Currently cloned repo:
+    Currently cloned remote-repo:
     \${C_ALLOTHER}\${CURRENT_REPO}\${C_RESET}
 
     For website \${C_TITLES}\$PADM_WEBSITE_NAME\${C_RESET}
@@ -413,10 +413,6 @@ if [ -f "\$PADM_GIT_DIR/HEAD" ]; then
     
     If you wanna change this, edit file:
     \${C_PATH_FILES}\$PADM_GIT_RES_DIR/GITUSER.sh\${C_RESET}
-    
-    NOTE:
-    These helper scripts only work with ForgejoGit and 'ssh://' proto to it.
-    No other Git server or other proto are supported at this moment.
 
 MSG
 
@@ -451,10 +447,6 @@ else
        
             \${C_EXAMPLE_COMMANDS}padm_clone_git_repo ssh://git@ForgejoGit/Myorg-Inc/my_php_website_project.git\${C_RESET}
     
-    
-    NOTE:
-    These helper scripts only work with ForgejoGit and 'ssh://' proto to it.
-    No other Git server or other proto are supported at this moment.
 
     BEFORE PROCEEDING WITH CLONING:
     First, make sure your user (\${C_ALLOTHER}\$PADM_FORGEJO_USER\${C_RESET}) had been given
@@ -551,10 +543,6 @@ if [[ ! -f "\$PADM_GIT_RES_DIR/ssh/id_ed25519" || ! -f "\$PADM_GIT_RES_DIR/ssh/i
     Run the following command to do any of these - automatically:
        
             \${C_EXAMPLE_COMMANDS}padm_activate_git\${C_RESET}
-
-    NOTE:
-    These helper scripts only work with ForgejoGit and 'ssh://' proto to it.
-    No other Git server or other proto are supported at this moment.
 
 MSG
     exit 1
@@ -757,7 +745,7 @@ if [ -f "\$PADM_GIT_DIR/HEAD" ]; then
     metadata will be irreversibly deleted from disk!!!
     By doing this you will delete what is currently the working website, and
     re-clone it, thus getting an absolutely fresh, and potentionally unconfigured-copy
-    from the remote Git repo.
+    from a remote Git repo.
     Directory \${C_PATH_DIRS}\$PROJECT_DIR\${C_RESET} will be left completely empty for a while
 
     > (option 2): Otherwise: Press Enter without typing anything, to CANCEL the operation
@@ -1010,10 +998,6 @@ if ls "${PADM_SCRIPTS_DIR_RUNTIME}"/padm_* 1> /dev/null 2>&1; then
     print_bashdocs "${PADM_SCRIPTS_DIR_RUNTIME}" "${PADM_CHROOT_BASE_DIR}/web"
     echo "    Type \${C_EXAMPLE_COMMANDS}padm_\${C_RESET} and press \"Tab\" twice to begin..."
     echo "    ------------------------------------------------------------------------------------"
-    echo ""
-    echo "    NOTE:"
-    echo "    These helper scripts only work with ForgejoGit and 'ssh://' proto to it."
-    echo "    No other Git server or other proto are supported at this moment."
     echo ""
 fi
 
