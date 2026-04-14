@@ -117,6 +117,8 @@ This execution approach guarantees `StartDaemon.sh` (which is supposedly a long-
 
 * `pattach <socket_name>`: Re-attaches to a running background session.
 
+Of course the wrappers and `dtach` can be used also in non-Jailed shell-accounts. But you can easily use `screen` or `tmux` on non-jailed accounts. So primary idea of the wrappers was to have a handy and safe alternative to run from within a Jail environment.
+
 ### 6. Recommended Jailkit Appsections (Hosting Tiers)
 Because of the deep enhancements made to `jk_init.ini`, we recommend setting up "Hosting Tiers" for your clients using these specific Appsection strings. 
 
