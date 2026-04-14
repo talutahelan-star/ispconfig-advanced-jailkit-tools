@@ -122,6 +122,7 @@ Modifications to `etc/jailkit/jk_init.ini` enable complex software inside the mi
 * **Custom `/opt` Integration:** The `[jre_headless___openjdk_8_zulu_ca]` section demonstrates mapping custom Java installations into the chroot.
 * **The `[dtach]` Section:** Brings in the core binary and `libutil.so.1` alongside the custom wrappers.
 * **Global Exclusions:** Aggressive paths like `/usr/lib/google-cloud-sdk` are explicitly excluded across basic profiles to prevent credential leakage in modern cloud environments.
+* **The `[ps_top_w_uptime]` Appsection Limitations:** While this section successfully provisions `ps` and `top` (secured via our `/proc` bind mounts), the commands `w`, `who`, `ping`, and `traceroute` are intentionally non-functional in v1.0. Granting raw socket access (for `ping`) or reading system-wide utmp logs (for `w`/`who`) natively inside a shared chroot introduces unacceptable privilege escalation and data leakage risks. They will remain disabled until secure wrappers are built.
 
 ## 4. The `dtach` Session Wrappers
 
@@ -173,3 +174,6 @@ Variables like `PADM_GIT_SERVER_IP_ADDRESS` and the ANSI color codes are current
 ### 6.2 Abstracting Path & Directory Assumptions (Dynamic Pathing)
 The initial release relies on strict regular expressions hardcoded to the default ISPConfig directory structure (e.g., `^\/var\/www\/clients\/client\d+\/web\d+$`).
 * **The Goal:** Refactor the "A" plugin, "Z" plugin, and the bash provisioning script to dynamically adapt to any filesystem configuration. This will involve querying ISPConfig's data or utilizing dynamic environment variables rather than hardcoded regex, allowing the extension to function flawlessly even if the sysadmin has customized the website root paths (e.g., `^\/clientsdata\/c\d+\/site\d+$`) or altered shell-user home directories via the ISPConfig UI.
+
+### 6.3 Secure Network & User Wrappers (Completing `ps_top_w_uptime`)
+To safely implement `ping`, `traceroute`, `w`, and `who` without compromising the chroot by granting raw `CAP_NET_RAW` capabilities or exposing host user data, we plan to build a client-server socket architecture. The jailed user will execute a dummy wrapper script inside the chroot. This wrapper will pipe the sanitized arguments over a socket to a root-owned daemon living *outside* the jail, which will safely execute the actual binary and pipe the `stdout` back to the user's terminal.

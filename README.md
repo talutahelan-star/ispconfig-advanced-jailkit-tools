@@ -130,7 +130,8 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 
 **Tier 2: Background Tasks (Set via Website Override)**
 `jk_lsh sftp coreutils basicshell extendedshell netutils ps_top_w_uptime dtach`
-* **Capabilities:** Adds the ability to view server processes (`top`, `ps`), but only the processes of the current UID. Also they can run persistent background programs using our `dtach` wrappers.
+* **Capabilities:** Adds the ability to view server processes (`top`, `ps`), but strictly limited to the processes of the current UID. Also allows persistent background programs using our `dtach` wrappers. 
+* **Note on `ps_top_w_uptime`:** The commands `w`, `who`, `ping`, and `traceroute` are intentionally disabled in this release. They are currently unsafe to run natively inside an untrusted shell-account. They are planned for a future release via secure socket wrappers (see Roadmap).
 
 **Tier 3: The Application Server (Set via Website Override)**
 `jk_lsh sftp coreutils basicshell extendedshell netutils ps_top_w_uptime dtach imagemagick jre_headless___openjdk_8_zulu_ca`
@@ -143,7 +144,14 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 ---
 
 ## 🛠️ Future Roadmap (v2.0)
-While v1.0 provides a robust, battle-tested "Golden Copy" of our provisioning engine, we have planned architectural refactoring for future releases to improve maintainability. This includes extracting templates, implementing a drop-in directory pattern for easier community contributions, and separating configurations. See the `FULL_TECHNICAL_REFERENCE.md` for full details on how we plan to evolve the codebase.
+While v1.0 provides a robust, battle-tested "Golden Copy" of our provisioning engine, we have planned architectural refactoring for future releases to improve maintainability and expand capabilities:
+
+1. **Secure Network/User Wrappers:** We plan to implement safe, over-the-socket wrappers for `ping`, `traceroute`, `w`, and `who`. This will safely activate the remaining commands listed in the `ps_top_w_uptime` appsection without compromising chroot security.
+2. **Template Extraction:** Extracting raw bash scripts into a `templates/` directory for cleaner variable injection.
+3. **Drop-in Plugin Architecture:** Implementing a drop-in directory pattern so the community can easily contribute new `padm_` helper scripts.
+4. **Configuration Separation:** Moving hardcoded variables (like Git IPs and colors) into a dedicated `.env` file.
+
+See the `FULL_TECHNICAL_REFERENCE.md` for full details on how we plan to evolve the codebase.
 
 ---
 
