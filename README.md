@@ -27,7 +27,7 @@ Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension d
 7. **Smart Identity & Environment Context:** Automatically extracts your website domain, client email, and contact details from the ISPConfig database to personalize your terminal prompts and pre-configure your Git authorship without manual setup.
 
 ---
-`[Note]` *Requires the creation of at least one non-Jailed shell-user per website for this particular feature to work for a particular website.*
+`[Note]` *This particular feature requires the creation of at least one non-Jailed shell-user in order to work for a particular website.*
 
 ## 🚀 Installation (Drop-In Replacement)
 
