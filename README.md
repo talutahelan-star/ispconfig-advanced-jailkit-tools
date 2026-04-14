@@ -31,7 +31,6 @@ Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension d
 `[Note]` *This particular feature requires the creation of at least one non-Jailed shell-user in order to work for a particular website.*
 
 
-
 ## 🚀 Installation (Drop-In Replacement)
 
 This repository is structured to mirror your Linux/ISPConfig filesystem. 
