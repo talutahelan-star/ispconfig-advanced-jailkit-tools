@@ -133,10 +133,9 @@ Modifications to `etc/jailkit/jk_init.ini` enable complex software inside the mi
 ## 4. The `dtach` Session Wrappers
 
 ### `optional-dtach-wrappers/pattach`, `pdetachnow`, `pdetachable`
-Standard `dtach` requires explicit socket paths, which gets messy in ISPConfig-created Jailed and non-Jailed shell-accounts. These wrappers automate socket management.
+Standard `dtach` requires explicit socket paths, which gets messy in ISPConfig-created Jailed and non-Jailed shell-accounts. These wrappers automate socket management specifically for ISPConfig's OOTB uid-shell-users-home-dir architecture, but also works fine (universally) for all shell users on Debian. So basically -> those are universall `dtach` wrappers, which (in addition) also implement special ISPConfig-aware socket handling (if there is ISPConfig detected).
 
 * **State Resolution:** They first check for an explicit `XDG_STATE_HOME`. If absent, they fall back to an ISPConfig-aware logic routine.
-* **Missing `getent` Workaround:** Because minimal Jailkit environments often strip `getent`, the wrappers parse `/etc/passwd` directly via `grep` and `cut` to resolve the shared `webX` user's home directory.
 * **Result:** All background session sockets are safely and invisibly routed to the user's `.pdtach` directory, keeping the environment clean.
 
 ## 5. Manual Host OS Configurations (Required)
@@ -182,4 +181,4 @@ The initial release relies on strict regular expressions hardcoded to the defaul
 * **The Goal:** Refactor the "A" plugin, "Z" plugin, and the bash provisioning script to dynamically adapt to any filesystem configuration. This will involve querying ISPConfig's data or utilizing dynamic environment variables rather than hardcoded regex, allowing the extension to function flawlessly even if the sysadmin has customized the website root paths (e.g., `^\/clientsdata\/c\d+\/site\d+$`) or altered shell-user home directories via the ISPConfig UI.
 
 ### 6.3 Secure Network & User Wrappers (Completing `ps_top_w_uptime`)
-To safely implement `ping`, `traceroute`, `w`, and `who` without compromising the chroot by granting raw `CAP_NET_RAW` capabilities or exposing host user data, we plan to build a client-server socket architecture. The jailed user will execute a dummy wrapper script inside the chroot. This wrapper will pipe the sanitized arguments over a socket to a root-owned daemon living *outside* the jail, which will safely execute the actual binary and pipe the `stdout` back to the user's terminal.
+To safely implement `ping`, `traceroute`, `w`, and `who` without compromising the chroot by granting raw `CAP_NET_RAW` capabilities or exposing host user data, we plan to build a client-server socket architecture. The jailed user will execute a dummy wrapper script inside the chroot. This wrapper will pipe the sanitized arguments over a socket to a root-owned daemon living *outside* the jail, which will safely execute the actual binary and pipe the `stdout` (again sanitized, if necessary) back to the user's terminal.
