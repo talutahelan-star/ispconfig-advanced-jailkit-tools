@@ -1,6 +1,6 @@
 # ISPConfig Advanced Jailkit Tools (The "Debian Fortress")
 
-Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension designed to transform a standard ISPConfig 3 installation into a highly secure, context-aware "Debian Fortress." This project introduces advanced chroot security, detached Git tracking for web directories, and persistent background session management.
+Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension designed to transform a standard ISPConfig 3 installation into a highly secure, context-aware "Debian Fortress." This project introduces improved look-and-feel of the shell-user's terminal sessions on top of advanced chroot security, detached Git tracking for web directories, and persistent background session management.
 
 *Co-authored by Talutah Elan and Gemini 3.1 Pro (AI).*
 
