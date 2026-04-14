@@ -113,6 +113,12 @@ To ensure idempotency and safe re-execution, the script is strictly chronologica
 ### Idempotency & Safe Re-Execution
 Critical user-specific files—such as the `GITUSER.sh` config, generated SSH Keys (`id_ed25519`), and SSH Config files—are wrapped in `if [ ! -f ... ]` checks. Once generated, they are *never* overwritten by subsequent script runs, protecting the user's customized Git identity and keys.
 
+### Git Provisioning & Vault Security Details
+* **Self-Hosted Git IPs:** By default, `scripts/padm_shelluser_provision.sh` contains a hardcoded `PADM_GIT_SERVER_IP_ADDRESS`. For standard Git services (like GitHub or GitLab), this IP is completely ignored. However, if you are cloning from a private, self-hosted Git service that *lacks* a DNS hostname, you must update this variable with your Git server's IP.
+* **SSH Protocol Preference:** We highly recommend cloning via `ssh://` rather than `https://`. The provisioning script makes this seamless by automatically generating secure SSH keys for the environment.
+* **Identity Management:** Your Git identity (`user.name`, `user.email`) is automatically populated and managed from a single centralized file.
+* **Vault Lockdown:** All generated SSH keys and Git configuration files are locked down with strict `x00` permissions (readable only by the owner). Because they are stored within the Vault directory (outside the chroot), they are mathematically unreachable from the jailed PHP-FPM environment.
+
 ## 3. Jailkit Configuration Enhancements (`jk_init.ini`)
 
 Modifications to `etc/jailkit/jk_init.ini` enable complex software inside the minimal jail. **Critically, these changes are scattered throughout the file, not just appended to the end.**
