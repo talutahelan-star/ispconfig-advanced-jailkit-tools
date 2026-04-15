@@ -1,6 +1,6 @@
 # ISPConfig Advanced Jailkit Tools (The "Debian Fortress")
 
-Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension designed to transform a standard ISPConfig 3 installation into a highly secure, context-aware "Debian Fortress." This project introduces improved look-and-feel of the shell-user's terminal sessions on top of advanced chroot security, detached Git tracking for web directories, and persistent background session management.
+Welcome to the **ISPConfig Advanced Jailkit and Git Tools**, a comprehensive extension designed to transform a standard ISPConfig 3 installation into a highly secure, context-aware "Debian php-hosting Fortress." This project introduces improved look-and-feel of the shell-user's terminal sessions on top of advanced chroot security, detached Git tracking for web directories, and persistent background session management.
 
 *Co-authored by Talutah Elan and Gemini 3.1 Pro (AI).*
 
@@ -12,7 +12,6 @@ Welcome to the **ISPConfig Advanced Jailkit Tools**, a comprehensive extension d
 * **Chroot PHP-FPM Checkbox:** In the ISPConfig UI -> on a website-level, the **"Chroot PHP-FPM"** checkbox must remain **checked** (which is the default). This extension is architected specifically for a protected, chrooted-website environment. If you (or client is allowed) to intentionally uncheck this security feature, then this extension's behavior will be unpredictable (not even tested). Contributions to test and implement predictable fallback behaviors for this edge-case scenario are welcome.
 * **Detached Git Tracking:** Clone and track your website (`web/`) securely using a detached Git worktree managed from the Vault.
   * **Prerequisite:** This feature relies on the secure Vault. Because of this, you must create at least one Non-Jailed shell user for any website where you want to use it.
-  * **Universal Compatibility:** By default, `scripts/padm_shelluser_provision.sh` contains a hardcoded `PADM_GIT_SERVER_IP_ADDRESS`. For standard Git services (like GitHub or GitLab), this IP is completely ignored. However, if you are cloning from a private, self-hosted Git service that *lacks* a DNS hostname, you must update this variable with your Git server's IP, and then your remote repo URL will become `ssh://git@ForgejoGit/Myorg-Inc/my_php_website_project.git` - exactly as the provided examples on the out-of-the-box generated bash scripts. Ofcourse you may change `ForgejoGit` with anything you want (by modifying `[PIPELINE EXPLANATION: 3.2b]` at `scripts/padm_shelluser_provision.sh`).
 * **Server OS and ISPConfig version:** The extension has been tested on Debian 12 and ISPConfig 3.3.0p3, but it is highly likely that it will work on older Debian systems, and on the newer Debian 13 too (when ISPConfig is compatible with Debian 13 of course). It is also highly likely that it will work on Ubuntu systems because they are simply based on Debian. Please try it, and I am expecting feedback. Thank you!
 
 ---

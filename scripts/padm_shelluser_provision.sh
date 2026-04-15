@@ -15,8 +15,19 @@
 # ------------------------------------------------------------------------------
 # 0. HARDCODED CONFIGURATION
 # ------------------------------------------------------------------------------
-# This IP will be injected into the generated scripts
-PADM_GIT_SERVER_IP_ADDRESS="127.0.0.1"
+# This IP will be injected into the generated scripts. 
+#
+# 	Option 1 (for regular `ssh://` operations):
+#		Leave empty ("") for universal Git SSH compatibility (ssh://git@GitHub, ssh://git@GitLab, ssh://git@Bitbucket, a self-hosted Git server with a DNS hostname, etc...)
+#
+# 	Option 2 (for dedicated private ISPConfig instances `ssh://` operations):
+# 		Set an IP ONLY if using a self-hosted Git server without a DNS hostname, which you want to access by `ssh://`.
+# 		If this is the case, then you may also change `GitServer` with anything you want (by modifying `[PIPELINE EXPLANATION: 3.2b]`
+#
+# Note: Choosing Option 2 will server-wide cripple the ability to clone via SSH from Git servers WITH a DNS hostname different than `GitServer`
+# Note: Cloning via HTTPS has nothing to do with this setup here. It's completely independent, and will work either ways. There is no particular setup here, related to HTTPS-cloning.
+# Note: But the user is completely on his own regarding the authorization with HTTPS. Public repos of course, do clone without authorization - out-of-the-box.
+PADM_GIT_SERVER_IP_ADDRESS=""
 
 # Color Codes Definition (tput commands injected into generated scripts)
 # These are literal strings that will be written to the user scripts to be evaluated at runtime.
@@ -222,10 +233,20 @@ if [ $PADM_SCENARIO -eq 2 ]; then
 cat <<EOF > "$PADM_GITUSER_SCRIPT"
 #!/bin/bash
 
-# 1. Identity Variables
-PADM_WEBSITE_ADMIN_EMAIL="$PADM_WEBSITE_ADMIN_EMAIL" # Put your Git-user email here if you don't want to use the default-generated one
+################################# 1. Identity Variables ####################################
+
+# Put your Git-user email here (if you don't want to use the default-generated one)
+PADM_WEBSITE_ADMIN_EMAIL="$PADM_WEBSITE_ADMIN_EMAIL"
+
+# Put your Git Server login username here
 PADM_FORGEJO_USER="$PADM_FORGEJO_USER"
+
+# Put your Full Name here (the way you want it displayed in commits by you)
 PADM_FORGEJO_USER_FULLNAME="$PADM_FORGEJO_USER_FULLNAME"
+
+###########################################################################################
+
+
 
 # 2. Config Application (Only if HEAD exists = Valid Repo)
 if [[ -f "\$GIT_DIR/HEAD" ]]; then
@@ -322,7 +343,7 @@ fi
 # ------------------------------------------------------------------------------
 
 # [PIPELINE EXPLANATION: 3.2a]
-# Generates a secure ed25519 keypair specifically for ForgejoGit authentication.
+# Generates a secure ed25519 keypair specifically for SSH GitServer authentication.
 # IDEMPOTENCY: We check if the key exists first. This guarantees that if the user 
 # has already uploaded their public key to the remote Git server, running the 
 # provisioner again won't destroy their backend access.
@@ -340,19 +361,31 @@ fi
 # ------------------------------------------------------------------------------
 
 # [PIPELINE EXPLANATION: 3.2b]
-# Creates a custom SSH config to map the 'ForgejoGit' alias to the correct IP,
+# Creates a custom SSH config to map the 'GitServer' alias to the correct IP,
 # system user ('git'), and the isolated IdentityFile. This bypasses the need 
 # for a global ~/.ssh/config which might conflict with ISPConfig setups.
 
 if [ ! -f "\$PADM_GIT_RES_DIR/ssh/config" ]; then
+    if [ -n "\$PADM_GIT_SERVER_IP_ADDRESS" ]; then
+        # LEGACY MODE: Specific IP-bound alias for self-hosted servers
 cat <<SSH_CONF > "\$PADM_GIT_RES_DIR/ssh/config"
-Host ForgejoGit
+Host GitServer
     HostName \$PADM_GIT_SERVER_IP_ADDRESS
     User git
     IdentityFile \$PADM_GIT_RES_DIR/ssh/id_ed25519
     IdentitiesOnly yes
     UserKnownHostsFile \$PADM_GIT_RES_DIR/ssh/known_hosts
 SSH_CONF
+    else
+        # UNIVERSAL MODE: Applies Vault identity to any Git provider (GitHub, GitLab, etc.)
+cat <<SSH_CONF > "\$PADM_GIT_RES_DIR/ssh/config"
+Host *
+    IdentityFile \$PADM_GIT_RES_DIR/ssh/id_ed25519
+    IdentitiesOnly yes
+    UserKnownHostsFile \$PADM_GIT_RES_DIR/ssh/known_hosts
+SSH_CONF
+    fi
+    
     chmod 600 "\$PADM_GIT_RES_DIR/ssh/config"
     echo "   [+] Generated and secured new ssh/config"
 fi
@@ -431,8 +464,8 @@ else
     Please store the most-sensitive files -> only in this dir!
     
     
-    Your SSH key-pair (which is intended only for use with ForgejoGit) is
-    currently residing in dir (you can replace it with another one if you wish):
+    Your SSH key-pair is currently residing in the following dir
+    (you can replace it with other key-pair, if you wish):
     \${C_PATH_DIRS}\$PADM_GIT_RES_DIR/ssh\${C_RESET}
     (it is a newly-generated key-pair, this script has just generated it)
     
@@ -445,14 +478,14 @@ else
 
     If you want to clone a repo, use this example command:
        
-            \${C_EXAMPLE_COMMANDS}padm_clone_git_repo ssh://git@ForgejoGit/Myorg-Inc/my_php_website_project.git\${C_RESET}
+            \${C_EXAMPLE_COMMANDS}padm_clone_git_repo ssh://git@GitServer/Myorg-Inc/my_php_website_project.git\${C_RESET}
     
 
     BEFORE PROCEEDING WITH CLONING:
-    First, make sure your user (\${C_ALLOTHER}\$PADM_FORGEJO_USER\${C_RESET}) had been given
-    access to the repo you want to clone in ForgejoGit!
+    First, make sure your user (\${C_ALLOTHER}\$PADM_FORGEJO_USER\${C_RESET}) has
+    access to the repo you want to clone in the target Git Server!
 
-    With the current setting, you have to create user in ForgejoGit with username:
+    With the current setting, you have to create user in GitServer with username:
             '\${C_ALLOTHER}\$PADM_FORGEJO_USER\${C_RESET}'
          
     ... and public key:
@@ -506,7 +539,7 @@ cat <<EOF > "$SCRIPT_CLONE"
 #     of a website from its remote Git repo.
 #
 #    Example usage:
-#     (begin-example)PADM_SCRIPT_NAME ssh://git@ForgejoGit/Myorg-Inc/my_php_website_project.git(end-example)
+#     (begin-example)PADM_SCRIPT_NAME ssh://git@GitServer/Myorg-Inc/my_php_website_project.git(end-example)
 #END-BASHDOC
 
 # HARDCODED VARIABLES
@@ -537,10 +570,11 @@ if [[ ! -f "\$PADM_GIT_RES_DIR/ssh/id_ed25519" || ! -f "\$PADM_GIT_RES_DIR/ssh/i
     cat <<MSG
 
     Obviously this is a new shell account!
-    You CANNOT clone a git repo before you have generated/installed your SSH keys,
-    and before you have configured SSH for ForgejoGit usage.
+    Maybe you CANNOT clone a git repo before you have generated your SSH keys,
+    and before you have uploaded your public key for SSH access in you target Git Server?
 
-    Run the following command to do any of these - automatically:
+    Run the following command to generate local SSH key-pair and SSH config - automatically:
+	(later, you can replace them with other keys if you want)
        
             \${C_EXAMPLE_COMMANDS}padm_activate_git\${C_RESET}
 
