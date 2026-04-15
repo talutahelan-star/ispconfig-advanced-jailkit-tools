@@ -136,7 +136,7 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 
 **Tier 3: The Application Server (Set via Website Override)**
 `jk_lsh sftp coreutils basicshell extendedshell netutils ps_top_w_uptime dtach imagemagick jre_headless___openjdk_8_zulu_ca`
-* **Capabilities:** In addition to Tier 2, this injects a fully isolated Java 8 JRE into the jail. *(Note: You can easily tune your server to support modern Java 21 or 25 environments using this exact same isolated/embedded appsection approach).*
+* **Capabilities:** In addition to Tier 2, this injects a fully isolated Java 8 JRE into the jail. *(Note: You can easily tune your server to support modern Java 21 or 25 environments by duplicating and transforming a little-bit this exact same isolated/embedded appsection `jre_headless___openjdk_8_zulu_ca` in `/etc/jailkit/jk_init.ini`).*
 
 **Tier 4: The Power User (Set via Website Override)**
 `jk_lsh sftp coreutils basicshell extendedshell netutils ssh scp mysql-client ps_top_w_uptime perl dtach git imagemagick midnightcommander jre_headless___openjdk_8_zulu_ca`
