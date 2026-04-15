@@ -121,7 +121,8 @@ This execution approach guarantees `StartDaemon.sh` (which is supposedly a long-
 Of course the wrappers and `dtach` can be used also in non-Jailed shell-accounts. But you can easily use `screen` or `tmux` on non-jailed accounts. So primary idea of the wrappers was to have a handy and safe alternative to run from within a Jail environment.
 
 ### 6. Recommended Jailkit Appsections (Hosting Tiers)
-Because of the deep enhancements made to `jk_init.ini`, we recommend setting up "Hosting Tiers" for your clients using these specific Appsection strings. 
+Because of the deep enhancements made to `jk_init.ini`, we recommend setting up "Hosting Tiers" for your clients using these specific Appsection strings.
+⚠️ Attention: Whatever tier you set, that what the shell-users get. At the same time: that's what the PHP-scripts get as their execution environment. So, be carefull with insecure/hacked websites also (the biggest threat)! Not only with leaked shell-user credentials(the smallest threat). There is always a single Jail per website instance. The website's Jailed shell-users just happens to also "live" inside it.
 
 **Tier 1: Minimal & Safe - no background tasks (Set this as the Server-Level Default)**
 `jk_lsh sftp coreutils basicshell`
@@ -139,8 +140,6 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 **Tier 4: The Power User (Set via Website Override)**
 `jk_lsh sftp coreutils basicshell extendedshell netutils ssh scp mysql-client ps_top_w_uptime perl dtach git imagemagick midnightcommander jre_headless___openjdk_8_zulu_ca`
 * **Capabilities:** Maximum capability. Adds `git`, Midnight Commander (`mc`), Perl, and CLI MySQL/MariaDB database tools to the Jails.
-
-⚠️ Attention: Whatever tier you set, that what the shell-users get, and at the same time: that's what the PHP-scripts get as an execution environment. So, be carefull with insecure/hacked websites also (the biggest threat)! Not only with leaked shell-user credentials. There is always a single Jail per Website instance.
 ---
 
 ## 🛠️ Future Roadmap (v2.0)
