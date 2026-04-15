@@ -161,7 +161,7 @@ The `dtach` binary is required for the session wrappers but is not pre-installed
 
 ## 6. Testing and Debugging
 1. For the ISPConfig ("A" and "Z") plugins, they need to be plugged-in. Then you must create/update/delete Shell-Users, and Websites to reproduce scenarios. `$app->log` statements can be viewed by `tail -f -n 200 /var/log/ispconfig/ispconfig.log`. First you need to set the speciffic Loglevel at ISPConfig UI -> System -> Server Config -> Server tab
-2. For the `padm_shelluser_provision.sh` script, to debug and tune it, you can execute it from the terminal directly by passing your testing arguments. It's easy, just execute the script once without any arguments, and it will dump a "copy-paste-friendly" execution command, with sample arguments for you to tune accordingly. And then execute it at will, as many times as you want, for any shell-user you want. The script is idempotent. Remember: this script is designed to be executed as root.
+2. For the `padm_shelluser_provision.sh` script, to debug and tune it, you can execute it from the terminal directly by passing your testing arguments. It's easy, just execute the script once without any arguments, and it will just dump a "copy-paste-friendly" execution command, with sample arguments for you to tune accordingly. And then execute it at will, as many times as you want, for any shell-user you want. The script is idempotent. Remember: this script is designed to be executed as root.
 
 ## 7. Future Roadmap & Refactoring (TODOs for v2.0)
 
