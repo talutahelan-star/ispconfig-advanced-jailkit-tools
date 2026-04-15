@@ -145,10 +145,10 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 ## 🛠️ Future Roadmap (v2.0)
 While v1.0 provides a robust, battle-tested "Golden Copy" of our provisioning engine, we have planned architectural refactoring for future releases to improve maintainability and expand capabilities:
 
-1. **Secure Network/User Wrappers:** We plan to implement safe, over-the-socket wrappers for `ping`, `traceroute`, `w`, and `who`. This will safely activate the remaining commands listed in the `ps_top_w_uptime` appsection without compromising chroot security.
-2. **Template Extraction:** Extracting raw bash scripts into a `templates/` directory for cleaner variable injection.
-3. **Drop-in Plugin Architecture:** Implementing a drop-in directory pattern so the community can easily contribute new `padm_` helper scripts.
-4. **Configuration Separation:** Moving hardcoded variables (like Git IPs and colors) into a dedicated `.env` file.
+1. **Template Extraction:** Extracting raw bash scripts into a `templates/` directory for cleaner variable injection.
+2. **Drop-in Plugin Architecture:** Implementing a drop-in directory pattern so the community can easily contribute new `padm_` helper scripts.
+3. **Configuration Separation:** Moving hardcoded variables (like Git IPs and colors) into a dedicated `.env` file.
+4. **Secure Network/User Wrappers:** We plan to implement safe, over-the-socket wrappers for `ping`, `traceroute`, `w`, and `who`. This will safely activate the remaining commands listed in the `ps_top_w_uptime` appsection without compromising chroot security.
 
 See the `FULL_TECHNICAL_REFERENCE.md` for full details on how we plan to evolve the codebase.
 
