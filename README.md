@@ -123,7 +123,7 @@ Of course the wrappers and `dtach` can be used also in non-Jailed shell-accounts
 ### 6. Recommended Jailkit Appsections (Hosting Tiers)
 Because of the deep enhancements made to `jk_init.ini`, we recommend setting up "Hosting Tiers" for your clients using these specific Appsection strings. 
 
-**Tier 1: Minimal & Safe - no background tasks except for cronjobs defined thru the ISPConfig UI, if enabled (Set this as the Server-Level Default)**
+**Tier 1: Minimal & Safe - no background tasks (Set this as the Server-Level Default)**
 `jk_lsh sftp coreutils basicshell`
 * **Capabilities:** Provides the beautiful colored terminal UI with the welcome message and allows secure SFTP access. The shell is extremely limited, making it perfectly safe as a global default for untrusted users.
 
