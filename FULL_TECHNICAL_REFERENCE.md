@@ -159,9 +159,13 @@ The `dtach` binary is required for the session wrappers but is not pre-installed
 
 ---
 
-## 6. Future Roadmap & Refactoring (TODOs for v2.0)
+## 6. Testing and Debugging
+1. For the ISPConfig ("A" and "Z") plugins, they need to be plugged-in. Then you must create/update/delete Shell-Users, and Websites to reproduce scenarios. `$app->log` statements can be viewed by `tail -f -n 200 /var/log/ispconfig/ispconfig.log`. First you need to set the speciffic Loglevel at ISPConfig UI -> System -> Server Config -> Server tab
+2. For the `padm_shelluser_provision.sh` script, to debug and tune it, you can execute it from the terminal directly by passing your testing arguments. It's easy, just execute the script once without any arguments, and it will dump a copy-paste-friendly execution command, with sample arguments for you to tune accordingly. And then execute it at will, as many times as you want, for any shell-user you want. The script is idempotent. Remember: this script is designed to be executed as root.
 
-### 6.1 Addressing the Bloated Provisioning Script
+## 7. Future Roadmap & Refactoring (TODOs for v2.0)
+
+### 7.1 Addressing the Bloated Provisioning Script
 To ensure the long-term maintainability of the bash provisioning engine (`scripts/padm_shelluser_provision.sh`) and to make it easier for the open-source community to contribute new `padm_` commands, we must address the script's monolithic size. The following architectural refactoring strategies are planned:
 
 #### Strategy 1: Externalize the Heredocs (Templates)
@@ -176,9 +180,9 @@ Adding a new `padm_` script currently requires modifying `if/then` blocks inside
 Variables like `PADM_GIT_SERVER_IP_ADDRESS` and the ANSI color codes are currently hardcoded at the top of the script.
 * **The Goal:** Move these configurations into a `padm_config.env` file. This allows sysadmins to easily tweak terminal colors or default IPs without risking accidental breaks to the core bash logic.
 
-### 6.2 Abstracting Path & Directory Assumptions (Dynamic Pathing)
+### 7.2 Abstracting Path & Directory Assumptions (Dynamic Pathing)
 The initial release relies on strict regular expressions hardcoded to the default ISPConfig directory structure (e.g., `^\/var\/www\/clients\/client\d+\/web\d+$`).
 * **The Goal:** Refactor the "A" plugin, "Z" plugin, and the bash provisioning script to dynamically adapt to any filesystem configuration. This will involve querying ISPConfig's data or utilizing dynamic environment variables rather than hardcoded regex, allowing the extension to function flawlessly even if the sysadmin has customized the website root paths (e.g., `^\/clientsdata\/c\d+\/site\d+$`) or altered shell-user home directories via the ISPConfig UI.
 
-### 6.3 Secure Network & User Wrappers (Completing `ps_top_w_uptime`)
+### 7.3 Secure Network & User Wrappers (Completing `ps_top_w_uptime`)
 To safely implement `ping`, `traceroute`, `w`, and `who` without compromising the chroot by granting raw `CAP_NET_RAW` capabilities or exposing host user data, we plan to build a client-server socket architecture. The jailed user will execute a dummy wrapper script inside the chroot. This wrapper will pipe the sanitized arguments over a socket to a root-owned daemon living *outside* the jail, which will safely execute the actual binary and pipe the `stdout` (again sanitized, if necessary) back to the user's terminal.
