@@ -51,7 +51,6 @@ This repository is structured to mirror your Linux/ISPConfig filesystem.
 
 4. **Optional Standalone Tools:** Copy the contents of `optional-dtach-wrappers/` to `/usr/local/bin/` and make them executable. These are absolutely safe scripts which wrap the `dtach` program, they are optionally about to be added to the user's jails. If you choose to install them, obviously you need `dtach` also. Installation of which is explained in "Manual Server Configurations (Required TODOs) -> point 4".
 
-If you encounter any issues please write to me at @
 ---
 
 ## ⚙️ Manual Server Configurations (Required TODOs)
