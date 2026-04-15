@@ -140,6 +140,7 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 `jk_lsh sftp coreutils basicshell extendedshell netutils ssh scp mysql-client ps_top_w_uptime perl dtach git imagemagick midnightcommander jre_headless___openjdk_8_zulu_ca`
 * **Capabilities:** Maximum capability. Adds `git`, Midnight Commander (`mc`), Perl, and CLI MySQL/MariaDB database tools to the Jails.
 
+Attention: Whatever tier you set, that what the shell-users get, and at the same time: that's what the PHP-scripts get as an execution environment. So, be carefull with insecure/hacked websites also (the biggest threat)! Not only with leaked shell-user credentials. There is always a single Jail per Website instance.
 ---
 
 ## 🛠️ Future Roadmap (v2.0)
