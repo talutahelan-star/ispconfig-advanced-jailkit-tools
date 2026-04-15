@@ -15,7 +15,7 @@
 # ------------------------------------------------------------------------------
 # 0. HARDCODED CONFIGURATION
 # ------------------------------------------------------------------------------
-# This IP will be injected into the generated scripts. 
+# This IP will be injected into the generated scripts.
 #
 # 	Option 1 (for regular `ssh://` operations):
 #		Leave empty ("") for universal Git SSH compatibility (ssh://git@GitHub, ssh://git@GitLab, ssh://git@Bitbucket, a self-hosted Git server with a DNS hostname, etc...)
