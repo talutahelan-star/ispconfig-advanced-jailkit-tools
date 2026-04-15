@@ -123,7 +123,7 @@ Of course the wrappers and `dtach` can be used also in non-Jailed shell-accounts
 ### 6. Recommended Jailkit Appsections (Hosting Tiers)
 Because of the deep enhancements made to `jk_init.ini`, we recommend setting up "Hosting Tiers" for your clients using these specific Appsection strings.
 
-⚠️ Attention: Whatever tier you set, that what the Jailed (chrooted) shell-users get. At the same time: that's what the PHP-scripts get as their execution environment. So, be carefull with setting tiers for insecure/hacked websites (the biggest threat)! There is always a single Jail per website instance. Website's Jailed shell-users just happens to also "live" inside it.
+⚠️ Attention: Whatever tier you set, that what the Jailed (chrooted) shell-users get. At the same time: that's what the PHP-scripts get as their execution environment. So, be carefull with setting tiers for insecure/hacked websites (the biggest threat). There is always a single Jail per website instance. Website's Jailed shell-users just happens to also "live" inside it.
 
 **Tier 1: Minimal & Safe - no background tasks (Set this as the Server-Level Default)**
 `jk_lsh sftp coreutils basicshell`
