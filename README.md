@@ -1,4 +1,4 @@
-# ISPConfig Advanced Jailkit and Git Tools (The "Debian php-host Fortress")
+# ISPConfig Advanced Jailkit and Git Tools
 
 Welcome to the **ISPConfig Advanced Jailkit and Git Tools**, a comprehensive extension designed to transform a standard ISPConfig 3 installation into a highly secure, context-aware "Debian php-host Fortress." This project introduces improved look-and-feel of the shell-user's terminal sessions on top of advanced chroot security, detached Git tracking for web directories, and persistent background session management.
 
