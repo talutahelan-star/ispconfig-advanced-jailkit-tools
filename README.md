@@ -110,9 +110,9 @@ If a standard user logs in via Jailkit, they receive a beautiful terminal enviro
 ### 5. Using Background Sessions (`dtach`)
 Because `screen` and `tmux` can be difficult to run securely inside Jailkit, we use `dtach`. The `optional-dtach-wrappers/` provide an easy way to run programs in the background persistently:
 
-* `pdetachnow <socket_name> <command>`: Starts a command in the background, and releases the current terminal immediately (can be very usefull for creating singleton jailed cronjobs from the ISPConfig UI. For instance:
+* `pdetachnow <socket_name> <command>`: Starts a command in the background, and releases the current terminal immediately (can be very usefull for creating singleton jailed cronjobs from the ISPConfig UI, or even executing singleton async background jobs from PHP itself. For instance:
 `/usr/local/bin/pdetachnow UNIQUE_SINGLETON_SOCKET_NAME /private/bin/StartDaemon.sh > /dev/null 2>&1`).
-This execution approach guarantees `StartDaemon.sh` (which is supposedly a long-running program), is executed only once, regardless of how many times the cronjob triggers.
+This execution approach guarantees `StartDaemon.sh` (which is supposedly a long-running program), is executed only once, regardless of how many times the cronjob triggers, because the wrapper checks `UNIQUE_SINGLETON_SOCKET_NAME` socket if the program is still alive, and does absolutely nothing if it is still alive.
 
 * `pdetachable <socket_name> <command>`: Starts a command and remains attached to it. Press `Ctrl+]` to detach.
 
