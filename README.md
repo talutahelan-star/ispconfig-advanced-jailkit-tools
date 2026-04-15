@@ -134,7 +134,7 @@ Because of the deep enhancements made to `jk_init.ini`, we recommend setting up 
 
 **Tier 1: Minimal & Safe - no background tasks (Set this as the Server-Level Default)**
 `jk_lsh sftp coreutils basicshell`
-* **Capabilities:** Provides the beautiful colored terminal UI with the welcome message and allows secure SFTP access. The shell is extremely limited, making it perfectly safe as a global default for untrusted users. Also the tier is suitable for hosting experimental and/or completely unverified PHP websites/scripts.
+* **Capabilities:** Provides the beautiful colored terminal UI with the welcome message and allows secure SFTP access. The shell is extremely limited, making it perfectly safe as a global default for untrusted users. Also the tier is suitable for hosting experimental and/or less-verified PHP websites/scripts exposed to the public.
 
 **Tier 2: Background Tasks (Set via Website Override)**
 `jk_lsh sftp coreutils basicshell extendedshell netutils ps_top_w_uptime dtach`
