@@ -36,14 +36,21 @@ Welcome to the **ISPConfig Advanced Jailkit and Git Tools**, a comprehensive ext
 This repository is structured to mirror your Linux/ISPConfig filesystem. 
 
 1. **Plugins:** Copy the contents of `plugins-available/` to `/usr/local/ispconfig/server/plugins-available/`. 
-   * **Enable the Plugins:** You must explicitly enable them by creating symlinks in the `plugins-enabled/` directory. The symlink names **must match** the original filenames exactly:
+   * **Enable the Plugins:** You must explicitly enable them by creating symlinks in the `plugins-enabled/` directory. The symlink names **must match** the original filenames exactly. Here is a one-liner command to perform this action completely in one shot:
      ```bash
-     ln -s /usr/local/ispconfig/server/plugins-available/a_chrooted_website_custom_func.inc.php /usr/local/ispconfig/server/plugins-enabled/a_chrooted_website_custom_func.inc.php
-     ln -s /usr/local/ispconfig/server/plugins-available/z_chrooted_website_custom_func.inc.php /usr/local/ispconfig/server/plugins-enabled/z_chrooted_website_custom_func.inc.php
+     chmod 750 /usr/local/ispconfig/server/plugins-available/a_chrooted_website_custom_func.inc.php; \
+     ln -s /usr/local/ispconfig/server/plugins-available/a_chrooted_website_custom_func.inc.php /usr/local/ispconfig/server/plugins-enabled/; \
+	 \
+     chmod 750 /usr/local/ispconfig/server/plugins-available/z_chrooted_website_custom_func.inc.php; \
+     ln -s /usr/local/ispconfig/server/plugins-available/z_chrooted_website_custom_func.inc.php /usr/local/ispconfig/server/plugins-enabled/; \
+	 
      ```
    * *Developer Note:* If you ever rename these files, remember that ISPConfig strictly requires the internal plugin name, the PHP class name, and the filename (minus `.inc.php`) to all perfectly match for the hook to trigger.
 
-2. **Scripts:** Copy the contents of `scripts/` to `/usr/local/ispconfig/server/scripts/`. Ensure they are executable (`chmod 700`).
+2. **Scripts:** Copy the contents of `scripts/` to `/usr/local/ispconfig/server/scripts/`. Ensure they are executable (`chmod 700`):
+   ```bash
+     chmod 700 /usr/local/ispconfig/server/scripts/padm_shelluser_provision.sh
+     ```
    * **⚠️ ISPConfig Upgrade Warning:** Upgrading ISPConfig in the future might overwrite the default `/usr/local/ispconfig/server/scripts/` directory (unconfirmed, but highly possible). To prevent losing `padm_shelluser_provision.sh`, you should either maintain a backup to re-apply after upgrades, or place the script in a safe, alternative directory (e.g., `/opt/ispconfig-padm/`) and update the path in the Z-plugin's `$app->system->exec_safe()` call to point there.
 
 3. **Jailkit Config:** *Carefully* merge `etc/jailkit/jk_init.ini` into your server's `/etc/jailkit/jk_init.ini`. 
