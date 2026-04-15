@@ -1,6 +1,6 @@
 # Full Technical Reference & Architecture
 
-This document provides a deep-dive into the architectural flow of the ISPConfig Advanced Jailkit Tools. It is intended for sysadmins and developers auditing the codebase and community contributors who want to commit changes.
+This document provides a deep-dive into the architectural flow of the ISPConfig Advanced Jailkit Tools. It is intended for sysadmins, developers auditing the codebase and community contributors who want to commit changes.
 
 ### ⚠️ Architectural Assumptions & Compatibility Disclaimer
 The core logic of these plugins and bash scripts relies heavily on strict regex parsing of ISPConfig's default directory paths. 
