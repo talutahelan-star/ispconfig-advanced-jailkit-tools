@@ -4,6 +4,7 @@ Welcome to the **ISPConfig Advanced Jailkit and Git Tools**, a comprehensive ext
 
 *Co-authored by Talutah Elan and Gemini 3.1 Pro (AI).*
 
+* Discussion board: https://forum.howtoforge.com/threads/ispconfig-advanced-jailkit-shell-user-and-git-tools.95089/
 ---
 
 ### ⚠️ IMPORTANT COMPATIBILITY DISCLAIMER
@@ -105,16 +106,26 @@ Use the built-in helper scripts to instantly generate SSH keys, configure your G
 
 ![Activating Git Tracking](https://raw.githubusercontent.com/talutahelan-star/ispconfig-advanced-jailkit-tools/refs/heads/main/_media/shell-admin-activate-git.png)
 
+### 4. Editing GITUSER.sh and/or SSH keys (optional)
+You can optionally edit your Git credentials and identity manually, and if you want, also you can replace the self-generated key-pair with another one at your preference.
+
+![Activating Git Tracking](https://raw.githubusercontent.com/talutahelan-star/ispconfig-advanced-jailkit-tools/refs/heads/main/_media/editing-gituser-sh.png)
+
+### 5. After editing GITUSER.sh
+Once you're satisfied with the git activation credentials and identity, you can easily just copy your public key to paste in the remote Git service for proper `ssh://` Git authentication.
+
+![Activating Git Tracking](https://raw.githubusercontent.com/talutahelan-star/ispconfig-advanced-jailkit-tools/refs/heads/main/_media/after-editing-gituser-sh.png)
+
 Once cloned, the terminal instantly becomes context-aware, displaying your branch name:
 
 ![Cloning Git Repo](https://raw.githubusercontent.com/talutahelan-star/ispconfig-advanced-jailkit-tools/refs/heads/main/_media/shell-admin-clone-git-repo.png)
 
-### 4. The Jailed User Experience
+### 6. The Jailed User Experience
 If a standard user logs in via Jailkit, they receive a beautiful terminal environment but are safely restricted from Git mechanics and Vault access.
 
 ![Jailed Shell Experience](https://raw.githubusercontent.com/talutahelan-star/ispconfig-advanced-jailkit-tools/refs/heads/main/_media/shell-jailed.png)
 
-### 5. Using Background Sessions (`dtach`)
+### 7. Using Background Sessions (`dtach`)
 Because `screen` and `tmux` can be difficult to run securely inside Jailkit, we use `dtach`. The `optional-dtach-wrappers/` provide an easy way to run programs in the background persistently:
 
 * `pdetachnow <socket_name> <command>`: Starts a command in the background, and releases the current terminal immediately (can be very usefull for creating singleton jailed cronjobs from the ISPConfig UI, or even executing singleton async background jobs from PHP itself. For instance:
@@ -127,10 +138,10 @@ This execution approach guarantees `StartDaemon.sh` (which is supposedly a long-
 
 Of course the wrappers and `dtach` can be used also in non-Jailed shell-accounts. But you can easily use `screen` or `tmux` on non-jailed accounts. So primary idea of the wrappers was to have a handy and safe alternative to run from within a Jail environment.
 
-### 6. Recommended Jailkit Appsections (Hosting Tiers)
+### 8. Recommended Jailkit Appsections (Hosting Tiers)
 Because of the deep enhancements made to `jk_init.ini`, we recommend setting up "Hosting Tiers" for your clients using these specific Appsection strings.
 
-⚠️ Attention: Whatever tier you set, that's what the Jailed (chrooted) shell-users get. At the same time: that's what the PHP-scripts get as their execution environment. So, be carefull with setting tiers for insecure/hacked websites (the biggest threat). There is always a single Jail per website instance. Website's Jailed shell-users just happens to also "live" inside it.
+⚠️ Attention: Whatever tier you set, that's what the Jailed (chrooted) shell-users get. At the same time: that's what the PHP-scripts get as their execution environment. So, be carefull while setting tiers for potentionally-insecure/and or less-verified websites (THIS IS THE BIGGEST THREAT). There is always a single Jail per website instance. Website's Jailed shell-users just happens to also "live" inside it.
 
 **Tier 1: Minimal & Safe - no background tasks (Set this as the Server-Level Default)**
 `jk_lsh sftp coreutils basicshell`
